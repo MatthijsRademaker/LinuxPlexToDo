@@ -23,8 +23,8 @@ api:
     key: gaeniKAkLHK2brxrL/WQec9jiMFWKEO9jeotvJjZqoU=
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  ssid: TheoBellaWifi
+  password: Gh0st12345678
 
 button:
   - platform: factory_reset
@@ -64,7 +64,7 @@ voice_assistant:
     - wait_until:
         not:
           microphone.is_capturing:
-    - lambda: id(echo_speaker).play(id(timer_finished_wave_file), sizeof(id(timer_finished_wave_file)));
+    - lambda: id(echo_speaker).play(wake_word_ping, sizeof(id(wake_word_ping)));
   on_listening:
     - delay: 600ms
     - wait_until:
@@ -333,6 +333,9 @@ esp_adf:
 file:
   - id: timer_finished_wave_file
     file: https://github.com/esphome/wake-word-voice-assistants/raw/main/sounds/timer_finished.wav
+
+  - id: wake_word_ping
+    file: wake-word-detected.raw
 
 micro_wake_word:
   on_wake_word_detected:
