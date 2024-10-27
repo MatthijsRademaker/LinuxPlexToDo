@@ -1,0 +1,146 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=mI6PYEzEUpcvrSb5AE/phDWVKgJ7UqltSddgYDgr6mM=
+      - WIREGUARD_PRESHARED_KEY=pRLLJWJ+3qU9t/JdQElAdczpRWM2Tx40RHHdiSUaJgk=
+      - WIREGUARD_ADDRESSES=10.168.1.231/32
+      - SERVER_COUNTRIES=Netherlands
+      - FIREWALL_VPN_INPUT_PORTS=59972
+      - FIREWALL_OUTBOUND_SUBNETS=172.30.1.0/24,192.168.1.0/24
+      - DOT_PROVIDERS=cloudflare # or other provider (google, quad9, etc.)
+      - DOT_DNS_ADDRESS=1.1.1.1 # or other DNS address
+      - HTTPPROXY=on
+      - HTTPPROXY_LOG=on
+    network_mode: 'reverse-proxy'
+    ports:
+      - 8888:8888/tcp
+      - 8388:8388/udp
+      - 8388:8388/tcp
+      - 3000:3000
+      - 3001:3001
+      - 59972:59972 # qBittorrent torrent port
+      - 59972:59972/udp # qBittorrent torrent port
+
+  flaresolverr:
+    image: 21hsmw/flaresolverr:nodriver
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - NAME_SERVERS=1.1.1.1
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=Europe/Amsterdam
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.9
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    network_mode: 'service:gluetun'
+    environment:
+      - PUID=13006
+      - PGID=13000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+
+    volumes:
+      - /plex-stack-config/config/prowlarr-config:/config
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:4.6.6-r0-ls350
+
+    container_name: qbittorrent-vpn
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=13007
+      - PGID=13000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+      - WEBUI_PORT=8080
+      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+    volumes:
+      - /plex-stack-config/config/qbittorrent-config:/config
+      - /mnt/servarr/data/torrents:/data/torrents
+    network_mode: 'service:gluetun'
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+
+  # qbit_manage:
+  #   container_name: qbit_manage
+  #   image: ghcr.io/stuffanthings/qbit_manage:latest
+  #   volumes:
+  #     - /plex-stack-config/config/qbit-manage:/config:rw
+  #     - /mnt/servarr/data/torrents:/data/torrents:rw
+  #     - /plex-stack-config/config/qbittorrent-config:/qbittorrent/:ro
+  #   environment:
+  #     - PUID=13007
+  #     - PGID=13000
+  #     - QBT_SCHEDULE=1440
+  #     - QBT_LOGFILE=activity.log
+  #     - QBT_LOG_LEVEL=INFO
+  #     - QBT_DIVIDER==
+  #     - QBT_WIDTH=100
+  #   restart: on-failure:2
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.30.1.13
+
+  # qbitrr:
+  #   image: feramance/qbitrr:latest
+  #   user: 1000:1000 # Required to ensure the container is run as the user who has perms to see the 2 mount points and the ability to write to the CompletedDownloadFolder mount
+  #   tty: true # Ensure the output of docker-compose logs qBitrr are properly colored.
+  #   restart: unless-stopped
+  #   # networks: This container MUST share a network with your Sonarr/Radarr instances
+  #   environment:
+  #     - TZ=Europe/London
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /plex-stack-config/config/qbitrr:/config # Config folder for qBitrr
+  #     # TODO get correct output
+  #     - /mnt/servarr/data/torrents/completed:/completed_downloads:rw # The script will ALWAYS require write permission in this folder if mounted, this folder is used to monitor completed downloads and if not present will cause the script to ignore downloaded file monitoring.
+  #   # Now just to make sure it is clean, when using this script in a docker you will need to ensure you config.toml values reflect the mounted folders.
+  #   # The same would apply to Settings.CompletedDownloadFolder
+  #   # e.g CompletedDownloadFolder = /completed_downloads/folder/in/container
+
+  #   logging: # this script will generate a LOT of logs - so it is up to you to decide how much of it you want to store
+  #     driver: 'json-file'
+  #     options:
+  #       max-size: '50m'
+  #       max-file: 3
+  #   depends_on: # Not needed but this ensures qBitrr only starts if the dependencies are up and running
+  #     - qbittorrent
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.30.1.14
+
+  cross-seed:
+    image: ghcr.io/cross-seed/cross-seed
+    container_name: cross-seed
+    user: 1000:1000 # optional but recommended
+    volumes:
+      - /plex-stack-config/config/cross-seed:/config
+      - /plex-stack-config/config/qbittorrent-config/qBittorrent/BT_backup:/torrents:ro # your torrent clients .torrent cache, can and should be mounted read-only (e.g. qbit: `BT_Backup` | deluge: `state` | transmission: `transmission/torrents` | rtorrent: session dir from `.rtorrent.rc`)
+      - /mnt/servarr/data/torrents/cross-seeds:/cross-seeds
+      - /mnt/servarr/data/torrents:/data # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
+        # will need to mirror your torrent client's path (like Arr's do)
+    command: daemon # this enables the daemon, change to search to specifically run a search ONLY
+    restart: 'no' # make sure to not enable it in search mode, otherwise it will keep rerunning constantly
+    networks:
+      default:
+        ipv4_address: 172.30.1.15
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy

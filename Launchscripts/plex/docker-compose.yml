@@ -1,0 +1,61 @@
+services:
+  #region plex & co
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    environment:
+      - PUID=1000
+      - PGID=13000
+      - VERSION=docker
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /plex-stack-config/config/plex-docker:/config
+      - /mnt/servarr/data/media:/media
+      - /tmp/transcoding:/transcoding
+    restart: unless-stopped
+    # ports:
+    #   - 32400:32400
+    #   - 32400:32400/udp
+    #   - 1900:1900/udp
+    #   - 8324:8324
+    #   - 32410:32410/udp
+    #   - 32412:32412/udp
+    #   - 32413:32413/udp
+    #   - 32414:32414/udp
+    #   - 32469:32469
+    network_mode: 'host'
+
+  # plextraktsync:
+  #   image: lscr.io/linuxserver-labs/plextraktsync:latest
+  #   container_name: plextraktsync
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/Amsterdam
+  #   volumes:
+  #     - /plex-stack-config/config/plextraktsync:/config
+  #   restart: unless-stopped
+
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=13009
+      - PGID=13000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+
+    volumes:
+      - /plex-stack-config/config/overseerr-config:/app/config
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.16
+
+networks:
+  default:
+    # tracking highest ip assigment
+    # 172.30.1.27
+    external: true
+    name: reverse-proxy

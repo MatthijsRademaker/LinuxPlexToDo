@@ -1,0 +1,115 @@
+services:
+  readarr_audio:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr_audio
+    environment:
+      - PUID=13004
+      - PGID=13000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /plex-stack-config/config/readarr-config-audio:/config
+      - /mnt/servarr/data:/data
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.4
+
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    environment:
+      - user=13014:13000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /plex-stack-config/config/audiobookshelf:/config
+      - /mnt/servarr/data/media/audiobooks:/audiobooks
+      - /mnt/servarr/data/media/podcasts:/podcasts
+      - /mnt/servarr/data/media/audiobookshelf-metadata:/metadata
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.28
+
+  readarr_books:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr_books
+    environment:
+      - PUID=13004
+      - PGID=13000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /plex-stack-config/config/readarr-config:/config
+      - /mnt/servarr/data:/data
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.3
+
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /plex-stack-config/config/calibre-config:/config
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.29
+
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - /plex-stack-config/config/calibre-web:/config
+      - /plex-stack-config/config/calibre-config/calibre-library:/books
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.30
+
+  calibre-kindle:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre-kindle
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /plex-stack-config/config/calibre-kindle:/config
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.33
+
+  calibre-web-kindle:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web-kindle
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - /plex-stack-config/config/calibre-web-kindle:/config
+      - /plex-stack-config/config/calibre-kindle/calibre-library:/books
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.34
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy

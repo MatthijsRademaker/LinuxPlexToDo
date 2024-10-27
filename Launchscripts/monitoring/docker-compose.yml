@@ -1,0 +1,106 @@
+services:
+  #region network & monitoring
+  proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - /plex-stack-config/config/reverse-proxy-manager/data:/data
+      - /plex-stack-config/config/reverse-proxy-manager/letsencrypt:/etc/letsencrypt
+    networks:
+      default:
+        ipv4_address: 172.30.1.12
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    volumes:
+      - /plex-stack-config/config/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.24
+
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    volumes:
+      - /plex-stack-config/config/homepage:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock:ro # (optional) For docker integrations
+    networks:
+      default:
+        ipv4_address: 172.30.1.25
+
+  wyl:
+    image: aceberg/watchyourlan:v2
+    container_name: watch-your-lan
+    network_mode: 'host'
+    restart: unless-stopped
+    volumes:
+      - ~/.dockerdata/wyl:/data/WatchYourLAN
+    environment:
+      TZ: Europe/Amsterdam # required: needs your TZ for correct time
+      IFACES: 'enp1s0' # required: 1 or more interface
+      HOST: '0.0.0.0' # optional, default: 0.0.0.0
+      PORT: '8840' # optional, default: 8840
+      TIMEOUT: '120' # optional, time in seconds, default: 120
+      # SHOUTRRR_URL: '' # optional, set url to notify
+      THEME: 'sand' # optional
+      COLOR: 'dark' # optional
+
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=13000
+      - TZ=Europe/Amsterdam
+
+    volumes:
+      - /plex-stack-config/config/tautulli-config:/config
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.10
+
+  dns:
+    restart: unless-stopped
+    container_name: dns
+    image: strm/dnsmasq
+    volumes:
+      - /plex-stack-config/config/dns/dnsmasq.conf:/etc/dnsmasq.conf
+    cap_add:
+      - NET_ADMIN
+    network_mode: 'host'
+
+  hardware-monitoring:
+    image: nicolargo/glances:3.4.0.5-full
+    container_name: hardware-monitoring
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/os-release:/etc/os-release:ro
+    environment:
+      - 'GLANCES_OPT=-w'
+    pid: host
+    networks:
+      default:
+        ipv4_address: 172.30.1.26
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.32
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy

@@ -6,7 +6,7 @@ set -a
 source .env
 set +a
 # This is always going to complain about UID being a read-only variable. 
-# However that is not a problem and it's necessary for UID to be defined in the .env so that docker-compose.yml can take it.
+# However that is not a problem and it's necessary for UID to be defined in the .env so that docker compose.yml can take it.
 # Reminder to set the UID variable in .env if you haven't already. It needs to be the user you want to run docker as. Find what it should be by running "id -u" from that user's shell.
 
 # Make users and group

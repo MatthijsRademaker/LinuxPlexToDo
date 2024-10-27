@@ -1,0 +1,17 @@
+services:
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr
+    container_name: recyclarr
+    networks:
+      - default
+    volumes:
+      - /plex-stack-config/config/recyclarr-config:/config
+    environment:
+      - UMASK=002
+      - RECYCLARR_CREATE_CONFIG=false
+      - TZ=Europe/Amsterdam
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy

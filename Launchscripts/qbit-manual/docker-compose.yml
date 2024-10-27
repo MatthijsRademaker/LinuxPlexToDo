@@ -1,0 +1,61 @@
+services:
+  gluetun-manual:
+    image: qmcgaw/gluetun
+    container_name: gluetun-manual
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=mI6PYEzEUpcvrSb5AE/phDWVKgJ7UqltSddgYDgr6mM=
+      - WIREGUARD_PRESHARED_KEY=pRLLJWJ+3qU9t/JdQElAdczpRWM2Tx40RHHdiSUaJgk=
+      - WIREGUARD_ADDRESSES=10.168.1.231/32
+      - SERVER_COUNTRIES=Netherlands
+      - FIREWALL_VPN_INPUT_PORTS=29854
+      - FIREWALL_OUTBOUND_SUBNETS=172.30.1.0/24,192.168.1.0/24
+      - HTTPPROXY=on
+      - HTTPPROXY_LOG=on
+    network_mode: 'reverse-proxy-manual'
+    volumes:
+      - ./gluetun-manual:/gluetun-manual
+    ports:
+      - 8889:8888/tcp
+      - 8389:8388/udp
+      - 8389:8388/tcp
+      - 29854:29854 # qBittorrent torrent port
+      - 29854:29854/udp # qBittorrent torrent port
+
+  qbittorrent-manual:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent-manual
+    depends_on:
+      - gluetun-manual
+    environment:
+      - PUID=13007
+      - PGID=13000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+      - WEBUI_PORT=8080
+    volumes:
+      - /plex-stack-config/config/qbittorrent-config-manual:/config
+      - /mnt/servarr/data/torrents-manual:/data/torrents-manual
+    network_mode: 'service:gluetun-manual'
+    restart: unless-stopped
+
+  proxy-manager-manual:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '9800:80'
+      - '9881:81'
+      - '9443:443'
+    volumes:
+      - /plex-stack-config/config/reverse-proxy-manager-manual/data:/data
+      - /plex-stack-config/config/reverse-proxy-manager-manual/letsencrypt:/etc/letsencrypt
+    networks:
+      - default
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy-manual

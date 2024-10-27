@@ -1,0 +1,55 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: 'ghcr.io/home-assistant/home-assistant:stable'
+    volumes:
+      - /home-assistant-stack/home-assistant-config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+
+  whisper:
+    container_name: whisper
+    image: rhasspy/wyoming-whisper
+    volumes:
+      - /home-assistant-config/whisper:/data
+    environment:
+      model: tiny-int8
+      language: nl
+    restart: unless-stopped
+    command: '--model tiny-int8 --language nl'
+    network_mode: host
+
+  piper:
+    container_name: piper
+    image: rhasspy/wyoming-piper
+    volumes:
+      - /home-assistant-stack/piper:/data
+    command: '--voice en_US-amy-medium'
+    restart: unless-stopped
+    stdin_open: true # Equivalent to the '-it' option in docker run
+    tty: true # Equivalent to the '-it' option in docker run
+    network_mode: host
+
+  openwakeword:
+    image: rhasspy/wyoming-openwakeword
+    container_name: openwakeword
+    network_mode: host
+    stdin_open: true # Equivalent to the '-it' option in docker run
+    tty: true # Equivalent to the '-it' option in docker run
+    volumes:
+      - /home-assistant-stack/open-wake-word-config/models:/models
+      - /home-assistant-stack/open-wake-word-config:/config
+    command: --preload-model 'ok_nabu' --custom-model-dir /models
+
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    volumes:
+      - /home-assistant-stack/esphome-config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    privileged: true
+    network_mode: host
