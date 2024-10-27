@@ -335,7 +335,7 @@ file:
     file: https://github.com/esphome/wake-word-voice-assistants/raw/main/sounds/timer_finished.wav
 
   - id: wake_word_ping
-    file: wake-word-detected.raw
+    file: https://github.com/MatthijsRademaker/LinuxPlexToDo/blob/main/Launchscripts/home-assistant/echo-va-config/wake-word-detected.raw
 
 micro_wake_word:
   on_wake_word_detected:
