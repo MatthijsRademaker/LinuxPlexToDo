@@ -60,27 +60,17 @@ voice_assistant:
   vad_threshold: 3
 
   on_wake_word_detected:
+    - microphone.stop_capture:
     - wait_until:
         not:
-          - voice_assistant.is_running
-    - homeassistant.service:
-        service: tts.speak
-        target:
-          entity_id: tts.piper
-        data:
-          media_player_entity_id: echo_speaker
-          message: 'Yes?'
+          microphone.is_capturing:
+    - lambda: id(echo_speaker).play(id(timer_finished_wave_file), sizeof(id(timer_finished_wave_file)));
+  on_listening:
+    - delay: 600ms
     - wait_until:
         not:
           speaker.is_playing:
-    - voice_assistant.start_continuous
-  on_stt_end:
-    - if:
-        condition:
-          switch.is_on: play_wakeword_sound
-        then:
-          - switch.turn_off: play_wakeword_sound
-  on_listening:
+    - microphone.capture:
     - light.turn_on:
         id: led
         blue: 100%
