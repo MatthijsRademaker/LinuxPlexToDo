@@ -61,6 +61,7 @@ services:
       - /home-assistant-stack/rabbitmq/data:/var/lib/rabbitmq
       - /home-assistant-stack/rabbitmq/log:/var/log/rabbitmq
       - /home-assistant-stack/rabbitmq/certs:/etc/rabbitmq/certs
+      - /home-assistant-stack/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
