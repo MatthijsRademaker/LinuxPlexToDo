@@ -53,3 +53,26 @@ services:
     restart: always
     privileged: true
     network_mode: host
+
+  rabbitmq:
+    container_name: rabbitMq
+    image: rabbitmq:4-management
+    volumes:
+      - /home-assistant-stack/rabbitmq/data:/var/lib/rabbitmq
+      - /home-assistant-stack/rabbitmq/log:/var/log/rabbitmq
+      - /home-assistant-stack/rabbitmq/certs:/etc/rabbitmq/certs
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_SSL_CACERTFILE: /etc/rabbitmq/certs/ca_certificate.pem
+      RABBITMQ_SSL_CERTFILE: /etc/rabbitmq/certs/server_certificate.pem
+      RABBITMQ_SSL_KEYFILE: /etc/rabbitmq/certs/server_key.pem
+      RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: true
+      RABBITMQ_SSL_VERIFY: verify_peer
+
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+      - '8883:8883'
+    restart: unless-stopped
+    network_mode: host
