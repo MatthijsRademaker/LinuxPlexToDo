@@ -62,7 +62,7 @@ services:
     network_mode: host
     ports:
       - '1883:1883'
-      - '9001:9001'
     volumes:
-      - /home-assistant-stack/mosquitto:/etc/mosquitto
-      - /home-assistant-stack/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /home-assistant-stack/mosquitto/data:/mosquitto/data
+      - /home-assistant-stack/mosquitto/log:/mosquitto/log
+      - /home-assistant-stack/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
