@@ -54,23 +54,15 @@ services:
     privileged: true
     network_mode: host
 
-  rabbitmq:
-    container_name: rabbitMq
-    image: rabbitmq:4.0.2-management
-    volumes:
-      - /home-assistant-stack/rabbitmq/data:/var/lib/rabbitmq
-      - /home-assistant-stack/rabbitmq/log:/var/log/rabbitmq
-      - /home-assistant-stack/rabbitmq/certs:/etc/rabbitmq/certs
-      - /home-assistant-stack/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-    command: '/bin/bash -c "rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_amqp1_0; rabbitmq-server"'
-    environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
-
-    ports:
-      - '15672:15672'
-      - '5672:5672'
-      - '8883:8883'
-      - '1883:1883'
+  mosquitto:
+    image: eclipse-mosquitto
+    hostname: mosquitto
+    container_name: mosquitto
     restart: unless-stopped
     network_mode: host
+    ports:
+      - '1883:1883'
+      - '9001:9001'
+    volumes:
+      - /home-assistant-stack/mosquitto:/etc/mosquitto
+      - /home-assistant-stack/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
