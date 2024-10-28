@@ -64,7 +64,13 @@ voice_assistant:
     - wait_until:
         not:
           microphone.is_capturing:
-    - lambda: id(echo_speaker).play(wake_word_ping, sizeof(id(wake_word_ping)));
+    - homeassistant.service:
+        service: tts.speak
+        data:
+          # TODO change this to your media_player entity and maybe determine through rabbitmq which one is active
+          media_player_entity_id: media_player.bitch
+          message: yes?
+          entity_id: tts.piper
   on_listening:
     - delay: 600ms
     - wait_until:
@@ -334,8 +340,8 @@ file:
   - id: timer_finished_wave_file
     file: https://github.com/esphome/wake-word-voice-assistants/raw/main/sounds/timer_finished.wav
 
-  - id: wake_word_ping
-    file: https://github.com/MatthijsRademaker/LinuxPlexToDo/blob/main/Launchscripts/home-assistant/echo-va-config/wake-word-detected.raw
+  # - id: wake_word_ping
+  #   file: https://github.com/MatthijsRademaker/LinuxPlexToDo/blob/2724d72a78d75671bcefb746ef2cb28c5c5bd00a/Launchscripts/home-assistant/echo-va-config/wake-word-detected.raw
 
 micro_wake_word:
   on_wake_word_detected:
