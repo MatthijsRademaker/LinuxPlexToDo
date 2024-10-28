@@ -56,7 +56,7 @@ services:
 
   rabbitmq:
     container_name: rabbitMq
-    image: rabbitmq:4-management
+    image: rabbitmq:4.0.2-management
     volumes:
       - /home-assistant-stack/rabbitmq/data:/var/lib/rabbitmq
       - /home-assistant-stack/rabbitmq/log:/var/log/rabbitmq
