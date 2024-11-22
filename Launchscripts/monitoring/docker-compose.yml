@@ -93,12 +93,76 @@ services:
 
   watchtower:
     image: containrrr/watchtower
+    container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     networks:
       default:
         ipv4_address: 172.30.1.32
+  
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    restart: unless-stopped 
+    network_mode: 'host'
+    command: tunnel --no-autoupdate run --token eyJhIjoiYjg1MTA4NjA1YjJkMTc2YjgzN2JmNzc1OWI1ZjBhZDUiLCJ0IjoiYWIwMDQ4MzYtMzI3Zi00NjYxLThlZGItZTZmYmFhYWVkOWE4IiwicyI6IlltWmxZek0yWWpNdE1XWmpaaTAwTnpobExXSTVaVGd0T0dZM05ESXlNemd5TTJNdyJ9
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+#    env_file: /plex-stack-config/config/keycloak/.env
+    container_name: keycloak
+    command: start
+    environment:
+      KC_HOSTNAME: 'auth.theobeorodeo.rodeo'
+      KC_PROXY: 'edge'
+      KC_BOOTSTRAP_ADMIN_USERNAME: 'admin'
+      KC_BOOTSTRAP_ADMIN_PASSWORD: 'admin' 
+      KC_PROXY_ADDRESS_FORWARDING: true
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /etc/certs/privkey.pem
+      KC_HTTPS_CERTIFICATE_FILE: /etc/certs/cert.pem
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /plex-stack-config/config/reverse-proxy-manager/letsencrypt/live/npm-17/fullchain.pem:/etc/certs/cert.pem
+      - /plex-stack-config/config/reverse-proxy-manager/letsencrypt/live/npm-17/privkey.pem:/etc/certs/privkey.pem
+    depends_on:
+      - keycloak-db
+    networks:
+      default:
+        ipv4_address: 172.30.1.50
+
+
+  keycloak-db:
+    env_file: /plex-stack-config/config/keycloak/.env
+    container_name: keycloak-db
+    image: postgres:10.1
+    volumes:
+      - /plex-stack-config/config/keycloak/database:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      default:
+        ipv4_address: 172.30.1.51
+
+  keycloak-db-backup:
+    image: postgres:10.1
+    container_name: keycloak-db-backup
+    env_file: /plex-stack-config/config/keycloak/backup-db.env
+    volumes:
+      - /plex-stack-config/config/keycloak/database-dump:/dump
+      - /etc/localtime:/etc/localtime:ro
+    entrypoint: |
+      bash -c 'bash -s <<EOF
+      trap "break;exit" SIGHUP SIGINT SIGTERM
+      sleep 2m
+      while /bin/true; do
+        pg_dump -Fc > /dump/dump_\`date +%d-%m-%Y"_"%H_%M_%S\`.psql
+        (ls -t /dump/dump*.psql|head -n $$BACKUP_NUM_KEEP;ls /dump/dump*.psql)|sort|uniq -u|xargs rm -- {}
+        sleep $$BACKUP_FREQUENCY
+      done
+      EOF'
+    networks:
+       default:
+          ipv4_address: 172.30.1.52
 
 networks:
   default:

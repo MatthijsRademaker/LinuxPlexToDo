@@ -14,7 +14,7 @@ services:
     container_name: whisper
     image: rhasspy/wyoming-whisper
     volumes:
-      - /home-assistant-config/whisper:/data
+      - /home-assistant-stack/whisper:/data
     environment:
       model: tiny-int8
       language: nl
@@ -46,7 +46,7 @@ services:
 
   esphome:
     container_name: esphome
-    image: esphome/esphome
+    image: ghcr.io/esphome/esphome
     volumes:
       - /home-assistant-stack/esphome-config:/config
       - /etc/localtime:/etc/localtime:ro
@@ -68,3 +68,12 @@ services:
       - /home-assistant-stack/mosquitto/log:/mosquitto/log
       - /home-assistant-stack/mosquitto/config:/mosquitto/config
       - /home-assistant-stack/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy
+
+volumes:
+  nginx_config:
+  staticfiles:

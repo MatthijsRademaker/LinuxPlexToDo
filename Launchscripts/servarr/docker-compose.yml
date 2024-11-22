@@ -82,11 +82,26 @@ services:
 
     volumes:
       - /plex-stack-config/config/bazarr-config:/config
-      - /mnt/servarr/data/media:/media
+      - /mnt/servarr/data:/data
     restart: unless-stopped
     networks:
       default:
         ipv4_address: 172.30.1.7
+
+  bazarr-anime:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr-anime
+    environment:
+      - PUID=13013
+      - PGID=13000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /plex-stack-config/config/bazarr-anime-config:/config
+      - /mnt/servarr/data:/data
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.75
 
 networks:
   default:
