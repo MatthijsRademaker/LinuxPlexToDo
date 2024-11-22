@@ -11,7 +11,7 @@ services:
       - /dev/dri:/dev/dri
     volumes:
       - /plex-stack-config/config/plex-docker:/config
-      - /mnt/servarr/data/media:/media
+      - /mnt/plex-stack/data/media:/media
       - /tmp/transcoding:/transcoding
     restart: unless-stopped
     # ports:

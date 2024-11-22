@@ -38,7 +38,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - /plex-stack-config/config/qbittorrent-config-manual:/config
-      - /mnt/servarr/data/torrents-manual:/data/torrents-manual
+      - /mnt/plex-stack/data/torrents-manual:/data/torrents-manual
     network_mode: 'service:gluetun-manual'
     restart: unless-stopped
 

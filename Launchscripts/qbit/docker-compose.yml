@@ -67,22 +67,22 @@ services:
       - UMASK=002
       - TZ=Europe/Amsterdam
       - WEBUI_PORT=8080
-#      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+    #      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
     volumes:
       - /plex-stack-config/config/qbittorrent-config:/config
-      - /mnt/servarr/data/torrents:/data/torrents
+      - /mnt/plex-stack/data/torrents:/data/torrents
     network_mode: 'service:gluetun'
     restart: unless-stopped
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-  
+      - 'com.centurylinklabs.watchtower.enable=false'
+
   upload-assistant:
     image: ghcr.io/audionut/upload-assistant:master
-    network_mode: "reverse-proxy"
+    network_mode: 'reverse-proxy'
     volumes:
       - /plex-stack-config/config/upload-assistant/config.py:/Upload-Assistant/data/config.py
-      - /mnt/servarr/data:/data
-#      - /mnt/servarr/data/torrents/BT_backup:/BT_backup
+      - /mnt/plex-stack/data:/data
+    #      - /mnt/plex-stack/data/torrents/BT_backup:/BT_backup
     stdin_open: true
     tty: true
 
@@ -98,7 +98,7 @@ services:
   #     - /etc/localtime:/etc/localtime:ro
   #     - /plex-stack-config/config/qbitrr:/config # Config folder for qBitrr
   #     # TODO get correct output
-  #     - /mnt/servarr/data/torrents/completed:/completed_downloads:rw # The script will ALWAYS require write permission in this folder if mounted, this folder is used to monitor completed downloads and if not present will cause the script to ignore downloaded file monitoring.
+  #     - /mnt/plex-stack/data/torrents/completed:/completed_downloads:rw # The script will ALWAYS require write permission in this folder if mounted, this folder is used to monitor completed downloads and if not present will cause the script to ignore downloaded file monitoring.
   #   # Now just to make sure it is clean, when using this script in a docker you will need to ensure you config.toml values reflect the mounted folders.
   #   # The same would apply to Settings.CompletedDownloadFolder
   #   # e.g CompletedDownloadFolder = /completed_downloads/folder/in/container
@@ -121,8 +121,8 @@ services:
     volumes:
       - /plex-stack-config/config/cross-seed:/config
       - /plex-stack-config/config/qbittorrent-config/qBittorrent/BT_backup:/torrents:ro # your torrent clients .torrent cache, can and should be mounted read-only (e.g. qbit: `BT_Backup` | deluge: `state` | transmission: `transmission/torrents` | rtorrent: session dir from `.rtorrent.rc`)
-      - /mnt/servarr/data/torrents/cross-seeds:/cross-seeds
-      - /mnt/servarr/data/torrents:/data # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
+      - /mnt/plex-stack/data/torrents/cross-seeds:/cross-seeds
+      - /mnt/plex-stack/data/torrents:/data # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
         # will need to mirror your torrent client's path (like Arr's do)
     command: daemon # this enables the daemon, change to search to specifically run a search ONLY
     restart: 'no' # make sure to not enable it in search mode, otherwise it will keep rerunning constantly

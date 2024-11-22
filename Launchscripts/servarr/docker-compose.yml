@@ -11,7 +11,7 @@ services:
 
     volumes:
       - /plex-stack-config/config/sonarr-config:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
     restart: unless-stopped
     networks:
       default:
@@ -28,7 +28,7 @@ services:
 
     volumes:
       - /plex-stack-config/config/sonarr-config-anime:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
     restart: unless-stopped
     networks:
       default:
@@ -47,7 +47,7 @@ services:
 
     volumes:
       - /plex-stack-config/config/radarr-config:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
     restart: unless-stopped
     networks:
       default:
@@ -64,7 +64,7 @@ services:
 
     volumes:
       - /plex-stack-config/config/radarr-config-anime:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
 
     restart: unless-stopped
     networks:
@@ -82,7 +82,7 @@ services:
 
     volumes:
       - /plex-stack-config/config/bazarr-config:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
     restart: unless-stopped
     networks:
       default:
@@ -97,7 +97,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - /plex-stack-config/config/bazarr-anime-config:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
     restart: unless-stopped
     networks:
       default:

@@ -9,7 +9,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - /plex-stack-config/config/readarr-config-audio:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
     restart: unless-stopped
     networks:
       default:
@@ -23,9 +23,9 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - /plex-stack-config/config/audiobookshelf:/config
-      - /mnt/servarr/data/media/audiobooks:/audiobooks
-      - /mnt/servarr/data/media/podcasts:/podcasts
-      - /mnt/servarr/data/media/audiobookshelf-metadata:/metadata
+      - /mnt/plex-stack/data/media/audiobooks:/audiobooks
+      - /mnt/plex-stack/data/media/podcasts:/podcasts
+      - /mnt/plex-stack/data/media/audiobookshelf-metadata:/metadata
     restart: unless-stopped
     networks:
       default:
@@ -41,7 +41,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - /plex-stack-config/config/readarr-config:/config
-      - /mnt/servarr/data:/data
+      - /mnt/plex-stack/data:/data
       - /plex-stack-config/config/calibre-config/calibre-library:/books
     restart: unless-stopped
     networks:

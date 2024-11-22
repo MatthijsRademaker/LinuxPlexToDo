@@ -1,3 +1,3 @@
 
 //192.168.1.95/home /mnt/personal-cloud cifs username=TheoBeoRodeo,password=xxx,uid=servarr,gid=arr,file_mode=0664,dir_mode=0775 0 0
-//192.168.1.95/Servarr /mnt/servarr cifs username=TheoBeoRodeo,password=xxx,uid=13007,gid=13000,file_mode=0775,dir_mode=0775,vers=3.0,noperm
+//192.168.1.95/Servarr /mnt/plex-stack cifs username=TheoBeoRodeo,password=xxx,uid=13007,gid=13000,file_mode=0775,dir_mode=0775,vers=3.0,noperm
