@@ -1,0 +1,23 @@
+services:
+  nextcloud-aio-mastercontainer:
+    image: nextcloud/all-in-one:latest
+    container_name: nextcloud-aio-mastercontainer
+    init: true
+    restart: always
+    # ports:
+    #   - '80:80'
+    #   - '8080:8080'
+    #   - '8443:8443'
+    volumes:
+      - /plex-stack-config/config/next-cloud:/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - SIG_PROXY=false
+    networks:
+      default:
+        ipv4_address: 172.30.1.81
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy
