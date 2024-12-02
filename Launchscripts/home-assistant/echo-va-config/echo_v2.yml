@@ -81,6 +81,12 @@ voice_assistant:
     - wait_until:
         not:
           speaker.is_playing:
+    - light.turn_on:
+        id: led
+        blue: 100%
+        red: 0%
+        green: 0%
+        effect: 'Slow Pulse'
     - microphone.capture:
   on_stt_vad_end:
     - light.turn_on:
@@ -100,8 +106,12 @@ voice_assistant:
   on_end:
     - delay: 100ms
     - wait_until:
+        # not:
+        #   speaker.is_playing:
         not:
-          speaker.is_playing:
+          voice_assistant.is_running:
+    - voice_assistant.start_continuous:
+    - script.execute: reset_led
   on_client_connected:
     - voice_assistant.start_continuous:
   on_client_disconnected:
@@ -134,6 +144,16 @@ light:
           min_brightness: 50%
           max_brightness: 100%
 
+script:
+  - id: reset_led
+    then:
+      - light.turn_on:
+          id: led
+          red: 100%
+          green: 89%
+          blue: 71%
+          brightness: 60%
+          effect: none
 select:
   - platform: template
     entity_category: config
