@@ -79,37 +79,6 @@ services:
       default:
         ipv4_address: 172.30.1.30
 
-  calibre-kindle:
-    image: lscr.io/linuxserver/calibre:latest
-    container_name: calibre-kindle
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Amsterdam
-    volumes:
-      - /plex-stack-config/config/calibre-kindle:/config
-    restart: unless-stopped
-    networks:
-      default:
-        ipv4_address: 172.30.1.33
-
-  calibre-web-kindle:
-    image: lscr.io/linuxserver/calibre-web:latest
-    container_name: calibre-web-kindle
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
-      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
-    volumes:
-      - /plex-stack-config/config/calibre-web-kindle:/config
-      - /plex-stack-config/config/calibre-kindle/calibre-library:/books
-    restart: unless-stopped
-    networks:
-      default:
-        ipv4_address: 172.30.1.34
-
 networks:
   default:
     external: true
