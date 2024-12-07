@@ -122,7 +122,7 @@ services:
       - /plex-stack-config/config/cross-seed:/config
       - /mnt/plex-stack/data/torrents:/torrents:ro # your torrent clients .torrent cache, can and should be mounted read-only (e.g. qbit: `BT_Backup` | deluge: `state` | transmission: `transmission/torrents` | rtorrent: session dir from `.rtorrent.rc`)
       - /mnt/plex-stack/data/torrents/cross-seeds:/cross-seeds
-      - /mnt/plex-stack/data/torrents:/data # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
+      - /mnt/plex-stack/data/torrents:/data/torrents # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
         # will need to mirror your torrent client's path (like Arr's do)
     command: search # this enables the daemon, change to search to specifically run a search ONLY
     restart: 'no' # make sure to not enable it in search mode, otherwise it will keep rerunning constantly
