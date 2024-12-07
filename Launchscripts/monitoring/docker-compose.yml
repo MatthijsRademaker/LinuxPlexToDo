@@ -98,6 +98,16 @@ services:
     network_mode: 'host'
     command: tunnel --no-autoupdate run --token eyJhIjoiYjg1MTA4NjA1YjJkMTc2YjgzN2JmNzc1OWI1ZjBhZDUiLCJ0IjoiYWIwMDQ4MzYtMzI3Zi00NjYxLThlZGItZTZmYmFhYWVkOWE4IiwicyI6IlltWmxZek0yWWpNdE1XWmpaaTAwTnpobExXSTVaVGd0T0dZM05ESXlNemd5TTJNdyJ9
 
+  dns:
+    restart: unless-stopped
+    container_name: dns
+    image: strm/dnsmasq
+    volumes:
+      - /plex-stack-config/config/dns/dnsmasq.conf:/etc/dnsmasq.conf
+    cap_add:
+      - NET_ADMIN
+    network_mode: 'host'
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     #    env_file: /plex-stack-config/config/keycloak/.env
