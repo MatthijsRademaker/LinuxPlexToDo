@@ -106,7 +106,8 @@ services:
       - /plex-stack-config/config/dns/dnsmasq.conf:/etc/dnsmasq.conf
     cap_add:
       - NET_ADMIN
-    network_mode: 'host'
+    ports:
+      - '54:53/udp'
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
