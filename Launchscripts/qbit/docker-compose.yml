@@ -117,7 +117,7 @@ services:
   cross-seed:
     image: ghcr.io/cross-seed/cross-seed:latest
     container_name: cross-seed
-    user: 1000:1000 # optional but recommended
+    user: 1000:13000 # optional but recommended
     volumes:
       - /plex-stack-config/config/cross-seed:/config
       - /mnt/plex-stack/data/torrents:/torrents:ro # your torrent clients .torrent cache, can and should be mounted read-only (e.g. qbit: `BT_Backup` | deluge: `state` | transmission: `transmission/torrents` | rtorrent: session dir from `.rtorrent.rc`)
