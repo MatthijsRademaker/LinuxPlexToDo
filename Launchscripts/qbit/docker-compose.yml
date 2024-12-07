@@ -115,7 +115,7 @@ services:
   #       ipv4_address: 172.30.1.14
 
   cross-seed:
-    image: ghcr.io/cross-seed/cross-seed
+    image: ghcr.io/cross-seed/cross-seed:latest
     container_name: cross-seed
     user: 1000:1000 # optional but recommended
     volumes:
@@ -126,9 +126,7 @@ services:
         # will need to mirror your torrent client's path (like Arr's do)
     command: daemon # this enables the daemon, change to search to specifically run a search ONLY
     restart: 'no' # make sure to not enable it in search mode, otherwise it will keep rerunning constantly
-    networks:
-      default:
-        ipv4_address: 172.30.1.15
+    network_mode: 'service:gluetun'
 
 networks:
   default:
