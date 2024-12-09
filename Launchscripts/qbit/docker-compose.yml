@@ -86,6 +86,16 @@ services:
     stdin_open: true
     tty: true
 
+  omegabrr:
+    container_name: omegabrr
+    image: ghcr.io/autobrr/omegabrr:latest
+    #image: ghcr.io/autobrr/omegabrr-distroless:latest
+    # ports:
+    #   - "7441:7441"
+    user: 1000:13000
+    volumes:
+      - '/plex-stack-config/config/omegabrr/config:/config'
+
   # qbitrr:
   #   image: feramance/qbitrr:latest
   #   user: 1000:1000 # Required to ensure the container is run as the user who has perms to see the 2 mount points and the ability to write to the CompletedDownloadFolder mount
