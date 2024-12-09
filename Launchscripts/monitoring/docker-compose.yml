@@ -14,6 +14,7 @@ services:
     networks:
       default:
         ipv4_address: 172.30.1.12
+      nextcloud-aio:
 
   portainer:
     image: portainer/portainer-ce:latest
@@ -168,3 +169,6 @@ networks:
   default:
     external: true
     name: reverse-proxy
+  nextcloud-aio:
+    external: true
+    name: nextcloud-aio
