@@ -76,15 +76,15 @@ services:
     labels:
       - 'com.centurylinklabs.watchtower.enable=false'
 
-  upload-assistant:
-    image: ghcr.io/audionut/upload-assistant:master
-    network_mode: 'reverse-proxy'
-    volumes:
-      - /plex-stack-config/config/upload-assistant/config.py:/Upload-Assistant/data/config.py
-      - /mnt/plex-stack/data:/data
-    #      - /mnt/plex-stack/data/torrents/BT_backup:/BT_backup
-    stdin_open: true
-    tty: true
+  # upload-assistant:
+  #   image: ghcr.io/audionut/upload-assistant:master
+  #   network_mode: 'reverse-proxy'
+  #   volumes:
+  #     - /plex-stack-config/config/upload-assistant/config.py:/Upload-Assistant/data/config.py
+  #     - /mnt/plex-stack/data:/data
+  #   #      - /mnt/plex-stack/data/torrents/BT_backup:/BT_backup
+  #   stdin_open: true
+  #   tty: true
 
   omegabrr:
     container_name: omegabrr
@@ -124,19 +124,19 @@ services:
   #     default:
   #       ipv4_address: 172.30.1.14
 
-  cross-seed:
-    image: ghcr.io/cross-seed/cross-seed:latest
-    container_name: cross-seed
-    user: 1000:13000 # optional but recommended
-    volumes:
-      - /plex-stack-config/config/cross-seed:/config
-      - /mnt/plex-stack/data/torrents:/torrents:ro # your torrent clients .torrent cache, can and should be mounted read-only (e.g. qbit: `BT_Backup` | deluge: `state` | transmission: `transmission/torrents` | rtorrent: session dir from `.rtorrent.rc`)
-      - /mnt/plex-stack/data/torrents/cross-seeds:/cross-seeds
-      - /mnt/plex-stack/data/torrents:/data/torrents # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
-        # will need to mirror your torrent client's path (like Arr's do)
-    command: daemon # this enables the daemon, change to search to specifically run a search ONLY
-    restart: 'no' # make sure to not enable it in search mode, otherwise it will keep rerunning constantly
-    network_mode: 'service:gluetun'
+  # cross-seed:
+  #   image: ghcr.io/cross-seed/cross-seed:latest
+  #   container_name: cross-seed
+  #   user: 1000:13000 # optional but recommended
+  #   volumes:
+  #     - /plex-stack-config/config/cross-seed:/config
+  #     - /mnt/plex-stack/data/torrents:/torrents:ro # your torrent clients .torrent cache, can and should be mounted read-only (e.g. qbit: `BT_Backup` | deluge: `state` | transmission: `transmission/torrents` | rtorrent: session dir from `.rtorrent.rc`)
+  #     - /mnt/plex-stack/data/torrents/cross-seeds:/cross-seeds
+  #     - /mnt/plex-stack/data/torrents:/data/torrents # OPTIONAL!!! this is location of your data (used for data-based searches or linking)
+  #       # will need to mirror your torrent client's path (like Arr's do)
+  #   command: daemon # this enables the daemon, change to search to specifically run a search ONLY
+  #   restart: 'no' # make sure to not enable it in search mode, otherwise it will keep rerunning constantly
+  #   network_mode: 'service:gluetun'
 
 networks:
   default:
