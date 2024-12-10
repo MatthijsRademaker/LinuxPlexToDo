@@ -94,7 +94,7 @@ services:
     #   - "7441:7441"
     user: 1000:13000
     volumes:
-      - '/plex-stack-config/config/omegabrr/config:/config'
+      - '/plex-stack-config/config/omegabrr:/config'
     networks:
       default:
         ipv4_address: 172.30.1.14
