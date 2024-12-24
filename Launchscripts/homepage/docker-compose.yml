@@ -1,0 +1,15 @@
+services:
+  docs:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    container_name: docs
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.30.1.90
+
+networks:
+  default:
+    external: true
+    name: reverse-proxy
