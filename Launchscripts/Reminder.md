@@ -1,10 +1,33 @@
-# docker commands
+# steps to restore networking for qbit
 
-- docker exec -it <container> ph
-- docker stop <container>
-- docker logs container
-- docker compose -f "docker-compose.qbittorrent.yml" up -d
-<!-- check outbound ip -->
-- docker exec -it qbittorrent curl ifconfig.me
+## Prep
 
-Highest ip is 172.30.1.34
+run down.sh
+sudo reboot
+
+1. Flush All Rules
+   sudo iptables -F
+
+2. Delete Custom Chains
+   sudo iptables -X
+
+3. Set Default Policies
+   sudo iptables -P INPUT ACCEPT
+   sudo iptables -P FORWARD ACCEPT
+   sudo iptables -P OUTPUT ACCEPT
+
+4. Remove Any IP-Masquerading (NAT) Rules
+   sudo iptables -t nat -F
+
+5. Restart docker
+   sudo systemctl restart docker
+
+6. Spin up gluetun
+   cd ~/Repos/LinuxPlexToDo/Launchscript/qbit
+   docker compose up -d
+
+7. Verify the Reset
+   sudo iptables -L
+
+8. Save the New Configuration (Optional)
+   sudo netfilter-persistent save
