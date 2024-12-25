@@ -24,10 +24,11 @@ docker compose up -d
 cd ~/Repos/LinuxPlexToDo/Launchscripts/plex
 docker compose up -d
 
-cd ~/Repos/LinuxPlexToDo/Launchscripts/qbit
+cd ~/Repos/LinuxPlexToDo/Launchscripts/servarr
 docker compose up -d
 
-cd ~/Repos/LinuxPlexToDo/Launchscripts/servarr
+# qbit as last service because it gets random ips assigned
+cd ~/Repos/LinuxPlexToDo/Launchscripts/qbit
 docker compose up -d
 
 echo "All services are up and running!"
