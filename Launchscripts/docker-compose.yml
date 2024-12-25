@@ -1,0 +1,18 @@
+name: plex-stack
+
+include:
+  - path: ./monitoring/docker-compose.yml
+  - path: ./immich/docker-compose.yml
+  - path: ./plex/docker-compose.yml
+  - path: ./qbit/docker-compose.yml
+  - path: ./servarr/docker-compose.yml
+  - path: ./books/docker-compose.yml
+  - path: ./home-assistant/docker-compose.yml
+  - path: ./homepage/docker-compose.yml
+# networks:
+#   reverse-proxy:
+#     name: reverse-proxy
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 172.30.1.0/24
