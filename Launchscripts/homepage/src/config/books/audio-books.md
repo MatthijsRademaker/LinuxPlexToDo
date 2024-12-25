@@ -3,6 +3,10 @@
 ## Overview
 
 The audiobook service runs through Audiobookshelf, providing access to a digital library of audiobooks and podcasts. It's configured for easy access and streaming of your audio content.
+Hit me up to get access to the [service](https://audiobooks.theobeorodeo.rodeo), i will create an account for you so that you can track your own listening progress. Recommended apps are:
+
+1. Audiobookshelf for android
+2. Plappa for ios (since Audiobookshelf is still in beta)
 
 ## Services
 

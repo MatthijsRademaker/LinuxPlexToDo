@@ -2,7 +2,7 @@
 
 ## Overview
 
-The e-book service runs through Calibre and Readarr, providing access to a digital library of books. It's configured for easy access and management of your digital book collection.
+The e-book service runs through Calibre and Readarr, providing access to a digital library of books. It's configured for easy access and management of your digital book collection. Hit me up to get access to the [service](https://books.theobeorodeo.rodeo), i will create an account for you so that you can track your own reading progress.
 
 ## Services
 
