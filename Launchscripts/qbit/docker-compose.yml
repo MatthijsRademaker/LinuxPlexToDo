@@ -24,6 +24,7 @@ services:
       - 8388:8388/tcp
       - 3000:3000
       - 3001:3001
+      - 8080:8080 # qBittorrent webui port
       - 59972:59972 # qBittorrent torrent port
       - 59972:59972/udp # qBittorrent torrent port
     networks:
