@@ -1,3 +1,4 @@
+# IP Range: 172.30.1.61-70
 services:
   #region sonarr
   sonarr:
@@ -15,7 +16,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.17
+        ipv4_address: 172.30.1.61
 
   sonarr-anime:
     image: lscr.io/linuxserver/sonarr:latest
@@ -32,7 +33,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.21
+        ipv4_address: 172.30.1.62
 
   #region radarr
   radarr:
@@ -51,7 +52,8 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.18
+        ipv4_address: 172.30.1.63
+
   radarr-anime:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr-anime
@@ -69,7 +71,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.22
+        ipv4_address: 172.30.1.64
 
   #region bazarr
   bazarr:
@@ -86,7 +88,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.7
+        ipv4_address: 172.30.1.65
 
   bazarr-anime:
     image: lscr.io/linuxserver/bazarr:latest
@@ -101,7 +103,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.75
+        ipv4_address: 172.30.1.66
 
 networks:
   default:

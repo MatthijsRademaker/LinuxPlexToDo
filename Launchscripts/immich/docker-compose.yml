@@ -5,6 +5,7 @@
 #
 # The compose file on main may not be compatible with the latest release.
 #
+# IP Range: 172.30.1.11-20
 
 name: immich
 
@@ -31,7 +32,7 @@ services:
       disable: false
     networks:
       default:
-        ipv4_address: 172.30.1.70
+        ipv4_address: 172.30.1.11
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -50,7 +51,7 @@ services:
       disable: false
     networks:
       default:
-        ipv4_address: 172.30.1.71
+        ipv4_address: 172.30.1.12
 
   redis:
     container_name: immich_redis
@@ -60,7 +61,7 @@ services:
     restart: always
     networks:
       default:
-        ipv4_address: 172.30.1.72
+        ipv4_address: 172.30.1.13
 
   database:
     container_name: immich_postgres
@@ -97,7 +98,7 @@ services:
     restart: always
     networks:
       default:
-        ipv4_address: 172.30.1.73
+        ipv4_address: 172.30.1.14
 
 volumes:
   model-cache:

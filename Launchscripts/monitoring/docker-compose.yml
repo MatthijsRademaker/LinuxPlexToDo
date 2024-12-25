@@ -1,3 +1,4 @@
+# IP Range: 172.30.1.21-30
 services:
   #region network & monitoring
   proxy-manager:
@@ -13,7 +14,7 @@ services:
       - /plex-stack-config/config/reverse-proxy-manager/letsencrypt:/etc/letsencrypt
     networks:
       default:
-        ipv4_address: 172.30.1.12
+        ipv4_address: 172.30.1.21
       nextcloud-aio:
 
   portainer:
@@ -25,7 +26,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.24
+        ipv4_address: 172.30.1.22
 
   homepage:
     image: ghcr.io/benphelps/homepage:latest
@@ -35,7 +36,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro # (optional) For docker integrations
     networks:
       default:
-        ipv4_address: 172.30.1.25
+        ipv4_address: 172.30.1.23
 
   wyl:
     image: aceberg/watchyourlan:v2
@@ -67,7 +68,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.10
+        ipv4_address: 172.30.1.24
 
   hardware-monitoring:
     image: nicolargo/glances:3.4.0.5-full
@@ -80,7 +81,7 @@ services:
     pid: host
     networks:
       default:
-        ipv4_address: 172.30.1.26
+        ipv4_address: 172.30.1.25
 
   watchtower:
     image: containrrr/watchtower
@@ -90,7 +91,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.32
+        ipv4_address: 172.30.1.26
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -131,7 +132,7 @@ services:
       - keycloak-db
     networks:
       default:
-        ipv4_address: 172.30.1.50
+        ipv4_address: 172.30.1.27
 
   keycloak-db:
     env_file: /plex-stack-config/config/keycloak/.env
@@ -142,7 +143,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       default:
-        ipv4_address: 172.30.1.51
+        ipv4_address: 172.30.1.28
 
   keycloak-db-backup:
     image: postgres:10.1
@@ -163,7 +164,7 @@ services:
       EOF'
     networks:
       default:
-        ipv4_address: 172.30.1.52
+        ipv4_address: 172.30.1.29
 
 networks:
   default:

@@ -1,3 +1,4 @@
+# IP Range: 172.30.1.51-60
 services:
   gluetun:
     image: qmcgaw/gluetun
@@ -39,7 +40,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.30.1.9
+        ipv4_address: 172.30.1.51
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:develop
@@ -94,6 +95,9 @@ services:
     user: 1000:13000
     volumes:
       - /plex-stack-config/config/autobrr:/config
+    networks:
+      default:
+        ipv4_address: 172.30.1.52
 
     # ports:
     # - 7474:7474
@@ -108,7 +112,7 @@ services:
       - /plex-stack-config/config/omegabrr:/config
     networks:
       default:
-        ipv4_address: 172.30.1.14
+        ipv4_address: 172.30.1.53
 
   # qbitrr:
   #   image: feramance/qbitrr:latest
