@@ -102,6 +102,9 @@ services:
       - QBT_DIVIDER==
       - QBT_WIDTH=100
     restart: on-failure:2
+    networks:
+      default:
+        ipv4_address: 172.30.1.53
   # upload-assistant:
   #   image: ghcr.io/audionut/upload-assistant:master
   #   network_mode: 'reverse-proxy'
@@ -123,7 +126,7 @@ services:
       - /plex-stack-config/config/autobrr:/config
     networks:
       default:
-        ipv4_address: 172.30.1.53
+        ipv4_address: 172.30.1.54
     # ports:
     # - 7474:7474
 
@@ -137,7 +140,7 @@ services:
       - /plex-stack-config/config/omegabrr:/config
     networks:
       default:
-        ipv4_address: 172.30.1.54
+        ipv4_address: 172.30.1.55
 
   # qbitrr:
   #   image: feramance/qbitrr:latest
