@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: lscr.io/linuxserver/qbittorrent:5.0.2-r0-ls367
     container_name: qbittorrent-vpn
     depends_on:
       - gluetun
@@ -75,6 +75,7 @@ services:
     network_mode: 'service:gluetun'
     restart: unless-stopped
 
+  # TODO fix manual categories that should never be removed
   qbit-manage:
     container_name: qbit-manage
     image: ghcr.io/stuffanthings/qbit_manage:latest
