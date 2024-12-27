@@ -7,6 +7,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
+    devices:
+      - /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d8335bb8be12ef11bde56db8bf9df066-if00-port0:/dev/ttyUSB0
     privileged: true
     network_mode: host
 
