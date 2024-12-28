@@ -23,7 +23,7 @@ sudo reboot
    sudo systemctl restart docker
 
 6. Spin up gluetun
-   cd ~/Repos/LinuxPlexToDo/Launchscript/qbit
+   cd ~/Repos/LinuxPlexToDo/Launchscripts/qbit
    docker compose up -d
 
 7. Verify the Reset
