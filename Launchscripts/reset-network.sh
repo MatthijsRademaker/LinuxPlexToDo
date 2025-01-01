@@ -34,6 +34,12 @@ clear_nat() {
     iptables -t nat -F
 }
 
+stop_gluetun() {
+    log_msg "Starting Gluetun container..."
+    cd /home/matthijs/Repos/LinuxPlexToDo/Launchscripts/qbit || exit
+    docker compose down
+}
+
 restart_services() {
     log_msg "Restarting Docker service..."
     systemctl restart docker
@@ -60,6 +66,7 @@ log_msg "Starting network reset process..."
 flush_rules
 set_default_policies
 clear_nat
+stop_gluetun
 restart_services
 start_gluetun
 verify_reset
