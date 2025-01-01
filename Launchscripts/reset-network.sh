@@ -35,7 +35,7 @@ clear_nat() {
 }
 
 stop_gluetun() {
-    log_msg "Starting Gluetun container..."
+    log_msg "Stopping Gluetun container..."
     cd /home/matthijs/Repos/LinuxPlexToDo/Launchscripts/qbit || exit
     docker compose down
 }
