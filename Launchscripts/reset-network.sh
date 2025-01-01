@@ -41,7 +41,7 @@ restart_services() {
 
 start_gluetun() {
     log_msg "Starting Gluetun container..."
-    cd ~/Repos/LinuxPlexToDo/Launchscripts/qbit || exit
+    cd /home/matthijs/Repos/LinuxPlexToDo/Launchscripts/qbit || exit
     docker compose up -d
 }
 
