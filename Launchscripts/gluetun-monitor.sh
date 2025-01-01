@@ -4,7 +4,7 @@ log_file="/var/log/gluetun-monitor.log"
 lockfile="/tmp/gluetun-monitor.lock"
 cooldown=360 # cooldown period in seconds
 max_attempts=30 # maximum number of health check attempts
-sleep_interval=2 # seconds between health checks
+sleep_interval=60 # seconds between health checks
 
 echo "Starting Gluetun monitor..." >> "$log_file"
 
