@@ -7,11 +7,11 @@ services:
       - NET_ADMIN
     network_mode: 'reverse-proxy'
     healthcheck:
-      test: ['CMD', '/gluetun', 'healthcheck']
-      interval: 30s
+      test: ['CMD', 'curl', '-f', 'http://localhost']
+      interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 2m
     environment:
       - VPN_SERVICE_PROVIDER=airvpn
       - VPN_TYPE=wireguard
